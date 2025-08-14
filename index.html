@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galería Interactiva</title>
+<title>Memorias de [Nombre]</title>
 <style>
   body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background: #f9f9f9; }
   section { display: none; padding: 20px; transition: opacity 0.5s ease-in-out; }
@@ -25,7 +25,8 @@
 <!-- Sección Presentación -->
 <section id="presentacion" class="active">
   <img src="presentacion.jpg" alt="Foto de Presentación">
-  <h1>Historias, recuerdos y familia</h1>
+  <h1>Memorias de [Nombre]</h1>
+  <p>Un espacio para recordar y compartir historias.</p>
   <button onclick="mostrarSeccion('galeria')">Ver Galería</button>
   <button onclick="mostrarSeccion('anecdotas')">Escribir Anécdota</button>
   <button onclick="mostrarSeccion('arbol')">Ver Árbol Genealógico</button>
@@ -46,7 +47,7 @@
 <!-- Sección Anécdotas -->
 <section id="anecdotas">
   <h2>Comparte tu anécdota</h2>
-  <textarea id="anecdota" placeholder="Escribe aquí..."></textarea><br>
+  <textarea id="anecdota" placeholder="Escribe aquí tu recuerdo..."></textarea><br>
   <button onclick="guardarAnecdota()">Guardar</button>
   <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
   <div id="mensajes" style="color: green; margin-top: 10px;"></div>
@@ -55,8 +56,9 @@
 <!-- Sección Árbol Genealógico -->
 <section id="arbol">
   <h2>Árbol Genealógico</h2>
-  <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" style="max-width: 90%; border-radius: 10px;">
-  <br>
+  <div class="carousel">
+    <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" onclick="ampliarImagen(this.src)">
+  </div>
   <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
 </section>
 
@@ -71,7 +73,7 @@ function mostrarSeccion(seccion) {
   document.getElementById(seccion).classList.add('active');
 }
 
-// Ampliar imagen
+// Ampliar imagen en modal
 function ampliarImagen(src) {
   const modal = document.getElementById('modal');
   const modalImg = document.getElementById('modal-img');
