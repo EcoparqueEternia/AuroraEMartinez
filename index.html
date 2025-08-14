@@ -28,6 +28,7 @@
   <h1>Bienvenidos a mi Galería</h1>
   <button onclick="mostrarSeccion('galeria')">Ver Galería</button>
   <button onclick="mostrarSeccion('anecdotas')">Escribir Anécdota</button>
+  <button onclick="mostrarSeccion('arbol')">Ver Árbol Genealógico</button>
 </section>
 
 <!-- Sección Galería -->
@@ -49,6 +50,14 @@
   <button onclick="guardarAnecdota()">Guardar</button>
   <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
   <div id="mensajes" style="color: green; margin-top: 10px;"></div>
+</section>
+
+<!-- Sección Árbol Genealógico -->
+<section id="arbol">
+  <h2>Árbol Genealógico</h2>
+  <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" style="max-width: 90%; border-radius: 10px;">
+  <br>
+  <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
 </section>
 
 <!-- Modal para ampliar imágenes -->
@@ -84,3 +93,4 @@ function guardarAnecdota() {
 </script>
 
 </body>
+</html>
