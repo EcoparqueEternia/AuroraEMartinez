@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Memorias de [Nombre]</title>
 <style>
   body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; text-align: center; }
   section { display: none; padding: 20px; transition: opacity 0.5s ease-in-out; }
@@ -34,6 +34,7 @@
 <!-- Sección Presentación -->
 <section id="presentacion" class="active">
   <img src="presentacion.jpg" alt="Foto de Presentación">
+  <h1>Memorias de [Nombre]</h1>
   <p>Un espacio para recordar y compartir historias.</p>
   <div class="cards">
     <div class="card" onclick="mostrarSeccion('galeria')">Galería</div>
@@ -59,7 +60,7 @@
   <h2>Árbol Genealógico</h2>
   <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" style="max-width:90%; border-radius:10px; cursor:pointer;" onclick="ampliarImagen(this.src)">
   <br>
-  <button onclick="mostrarSeccion('presentacion')">Volver</button>
+  <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
 </section>
 
 <!-- Sección Recuerdos -->
@@ -68,7 +69,7 @@
   <input type="text" id="autor" placeholder="Tu nombre">
   <textarea id="anecdota" placeholder="Escribe aquí tu recuerdo..."></textarea><br>
   <button onclick="guardarAnecdota()">Guardar</button>
-  <button onclick="mostrarSeccion('presentacion')">Volver</button>
+  <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
   <div id="mensajes" style="color: green; margin-top: 10px;"></div>
 
   <div id="anecdotasGuardadas"></div>
@@ -79,61 +80,97 @@
   <img id="modal-img" src="">
 </div>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
+
 <script>
-// Cambiar secciones
-function mostrarSeccion(seccion) {
-  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-  document.getElementById(seccion).classList.add('active');
-  if(seccion === 'anecdotas') cargarAnecdotas();
-}
+  // Configuración de Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXITZbvFlKimLYortmNuR77Y1-8lMBnaI",
+    authDomain: "anecdotario-2fd2c.firebaseapp.com",
+    databaseURL: "https://anecdotario-2fd2c-default-rtdb.firebaseio.com",
+    projectId: "anecdotario-2fd2c",
+    storageBucket: "anecdotario-2fd2c.firebasestorage.app",
+    messagingSenderId: "13632591324",
+    appId: "1:13632591324:web:61144ef77e61233ffc6b19",
+    measurementId: "G-E28P61XXD0"
+  };
 
-// Modal para imágenes
-function ampliarImagen(src) {
-  const modal = document.getElementById('modal');
-  const modalImg = document.getElementById('modal-img');
-  modalImg.src = src;
-  modal.style.display = 'flex';
-  modal.onclick = () => { modal.style.display = 'none'; };
-}
+  // Inicializar Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+  const analytics = firebase.analytics();
 
-// Guardar anécdota
-function guardarAnecdota() {
-  const texto = document.getElementById('anecdota').value.trim();
-  const autor = document.getElementById('autor').value.trim() || "Anónimo";
-  if(!texto) { alert("Escribe algo antes de guardar."); return; }
-  let anecdotas = JSON.parse(localStorage.getItem('anecdotas')) || [];
-  anecdotas.push({autor, texto});
-  localStorage.setItem('anecdotas', JSON.stringify(anecdotas));
-  document.getElementById('anecdota').value = "";
-  document.getElementById('autor').value = "";
-  document.getElementById('mensajes').innerText = "¡Recuerdo guardado!";
-  cargarAnecdotas();
-}
-
-// Cargar anécdotas guardadas con opción de eliminar
-function cargarAnecdotas() {
-  const contenedor = document.getElementById('anecdotasGuardadas');
-  contenedor.innerHTML = "";
-  let anecdotas = JSON.parse(localStorage.getItem('anecdotas')) || [];
-  if(anecdotas.length === 0) {
-    contenedor.innerHTML = "<p>No hay recuerdos aún.</p>";
-    return;
+  // Cambiar secciones
+  function mostrarSeccion(seccion) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(seccion).classList.add('active');
+    if(seccion === 'anecdotas') cargarAnecdotas();
   }
-  anecdotas.forEach((a, index) => {
-    const div = document.createElement('div');
-    div.className = 'anecdotaItem';
-    div.innerHTML = `<span class="autor">${a.autor}:</span> ${a.texto} <button class="eliminarBtn" onclick="eliminarAnecdota(${index})">X</button>`;
-    contenedor.appendChild(div);
-  });
-}
 
-// Eliminar anécdota
-function eliminarAnecdota(index) {
-  let anecdotas = JSON.parse(localStorage.getItem('anecdotas')) || [];
-  anecdotas.splice(index, 1);
-  localStorage.setItem('anecdotas', JSON.stringify(anecdotas));
-  cargarAnecdotas();
-}
+  // Modal para imágenes
+  function ampliarImagen(src) {
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    modalImg.src = src;
+    modal.style.display = 'flex';
+    modal.onclick = () => { modal.style.display = 'none'; };
+  }
+
+  // Referencia a la base de datos
+  const dbRef = database.ref('recuerdos');
+
+  // Guardar un recuerdo
+  function guardarAnecdota() {
+    const texto = document.getElementById('anecdota').value.trim();
+    const autor = document.getElementById('autor').value.trim() || "Anónimo";
+    if (!texto) { alert("Escribe algo antes de guardar."); return; }
+
+    const nuevoRecuerdo = dbRef.push();
+    nuevoRecuerdo.set({
+      autor: autor,
+      texto: texto,
+      fecha: new Date().toISOString()
+    });
+
+    document.getElementById('anecdota').value = "";
+    document.getElementById('autor').value = "";
+    document.getElementById('mensajes').innerText = "¡Recuerdo guardado!";
+    cargarAnecdotas();
+  }
+
+  // Cargar recuerdos
+  function cargarAnecdotas() {
+    const contenedor = document.getElementById('anecdotasGuardadas');
+    contenedor.innerHTML = "";
+
+    dbRef.once('value', (snapshot) => {
+      const recuerdos = snapshot.val();
+      if (!recuerdos) {
+        contenedor.innerHTML = "<p>No hay recuerdos aún.</p>";
+        return;
+      }
+      Object.keys(recuerdos).forEach((key) => {
+        const a = recuerdos[key];
+        const div = document.createElement('div');
+        div.className = 'anecdotaItem';
+        div.innerHTML = `
+          <span class="autor">${a.autor}:</span> ${a.texto} 
+          <button class="eliminarBtn" onclick="eliminarAnecdota('${key}')">X</button>
+        `;
+        contenedor.appendChild(div);
+      });
+    });
+  }
+
+  // Eliminar recuerdo
+  function eliminarAnecdota(key) {
+    dbRef.child(key).remove();
+    cargarAnecdotas();
+  }
+
 </script>
 
 </body>
