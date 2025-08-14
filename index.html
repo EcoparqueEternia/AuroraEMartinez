@@ -24,8 +24,9 @@
   #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:10; }
   #modal img { max-width:90%; max-height:90%; border-radius:10px; }
   #anecdotasGuardadas { text-align: left; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
-  .anecdotaItem { background: #e8f5e9; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+  .anecdotaItem { background: #e8f5e9; padding: 10px; margin-bottom: 10px; border-radius: 5px; position: relative; }
   .autor { font-weight: bold; color: #2e7d32; }
+  .eliminarBtn { position: absolute; top: 5px; right: 5px; background: #e53935; color: white; border: none; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; }
 </style>
 </head>
 <body>
@@ -57,9 +58,8 @@
 <!-- Sección Árbol Genealógico -->
 <section id="arbol">
   <h2>Árbol Genealógico</h2>
-  <div class="carousel">
-    <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" onclick="ampliarImagen(this.src)">
-  </div>
+  <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" style="max-width:90%; border-radius:10px; cursor:pointer;" onclick="ampliarImagen(this.src)">
+  <br>
   <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
 </section>
 
@@ -100,7 +100,7 @@ function ampliarImagen(src) {
 // Guardar anécdota
 function guardarAnecdota() {
   const texto = document.getElementById('anecdota').value.trim();
-  const autor = document.getElementById('autor').value.trim() || "Anonimo";
+  const autor = document.getElementById('autor').value.trim() || "Anónimo";
   if(!texto) { alert("Escribe algo antes de guardar."); return; }
   let anecdotas = JSON.parse(localStorage.getItem('anecdotas')) || [];
   anecdotas.push({autor, texto});
@@ -111,7 +111,7 @@ function guardarAnecdota() {
   cargarAnecdotas();
 }
 
-// Cargar anécdotas guardadas
+// Cargar anécdotas guardadas con opción de eliminar
 function cargarAnecdotas() {
   const contenedor = document.getElementById('anecdotasGuardadas');
   contenedor.innerHTML = "";
@@ -120,12 +120,20 @@ function cargarAnecdotas() {
     contenedor.innerHTML = "<p>No hay recuerdos aún.</p>";
     return;
   }
-  anecdotas.forEach(a => {
+  anecdotas.forEach((a, index) => {
     const div = document.createElement('div');
     div.className = 'anecdotaItem';
-    div.innerHTML = `<span class="autor">${a.autor}:</span> ${a.texto}`;
+    div.innerHTML = `<span class="autor">${a.autor}:</span> ${a.texto} <button class="eliminarBtn" onclick="eliminarAnecdota(${index})">X</button>`;
     contenedor.appendChild(div);
   });
+}
+
+// Eliminar anécdota
+function eliminarAnecdota(index) {
+  let anecdotas = JSON.parse(localStorage.getItem('anecdotas')) || [];
+  anecdotas.splice(index, 1);
+  localStorage.setItem('anecdotas', JSON.stringify(anecdotas));
+  cargarAnecdotas();
 }
 </script>
 
