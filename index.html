@@ -5,19 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Memorias de [Nombre]</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background: #f9f9f9; }
+  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; text-align: center; }
   section { display: none; padding: 20px; transition: opacity 0.5s ease-in-out; }
   section.active { display: block; opacity: 1; }
+  h1, h2 { color: #333; }
   img { max-width: 100%; height: auto; border-radius: 10px; }
   .carousel { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scroll-behavior: smooth; }
   .carousel::-webkit-scrollbar { height: 8px; }
   .carousel::-webkit-scrollbar-thumb { background-color: #4CAF50; border-radius: 4px; }
   .carousel img { width: 200px; cursor: pointer; border-radius: 5px; transition: transform 0.3s; }
   .carousel img:hover { transform: scale(1.05); }
+  .cards { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+  .card { background: #4CAF50; color: white; padding: 20px; border-radius: 10px; width: 150px; cursor: pointer; font-size: 16px; transition: transform 0.3s; }
+  .card:hover { transform: scale(1.05); }
   button { padding: 10px 20px; margin: 10px; cursor: pointer; border: none; border-radius: 5px; background-color: #4CAF50; color: white; font-size: 16px; }
-  textarea { width: 90%; height: 120px; margin: 20px 0; padding: 10px; border-radius: 5px; border: 1px solid #ccc; resize: none; }
+  textarea, input { width: 90%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin: 10px 0; }
+  textarea { height: 120px; resize: none; }
   #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:10; }
   #modal img { max-width:90%; max-height:90%; border-radius:10px; }
+  #anecdotasGuardadas { text-align: left; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .anecdotaItem { background: #e8f5e9; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+  .autor { font-weight: bold; color: #2e7d32; }
 </style>
 </head>
 <body>
@@ -27,9 +35,11 @@
   <img src="presentacion.jpg" alt="Foto de Presentación">
   <h1>Memorias de [Nombre]</h1>
   <p>Un espacio para recordar y compartir historias.</p>
-  <button onclick="mostrarSeccion('galeria')">Ver Galería</button>
-  <button onclick="mostrarSeccion('anecdotas')">Escribir Anécdota</button>
-  <button onclick="mostrarSeccion('arbol')">Ver Árbol Genealógico</button>
+  <div class="cards">
+    <div class="card" onclick="mostrarSeccion('galeria')">Galería</div>
+    <div class="card" onclick="mostrarSeccion('arbol')">Árbol Genealógico</div>
+    <div class="card" onclick="mostrarSeccion('anecdotas')">Recuerdos</div>
+  </div>
 </section>
 
 <!-- Sección Galería -->
@@ -44,15 +54,6 @@
   <button onclick="mostrarSeccion('presentacion')">Volver</button>
 </section>
 
-<!-- Sección Anécdotas -->
-<section id="anecdotas">
-  <h2>Comparte tu anécdota</h2>
-  <textarea id="anecdota" placeholder="Escribe aquí tu recuerdo..."></textarea><br>
-  <button onclick="guardarAnecdota()">Guardar</button>
-  <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
-  <div id="mensajes" style="color: green; margin-top: 10px;"></div>
-</section>
-
 <!-- Sección Árbol Genealógico -->
 <section id="arbol">
   <h2>Árbol Genealógico</h2>
@@ -62,18 +63,32 @@
   <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
 </section>
 
+<!-- Sección Recuerdos -->
+<section id="anecdotas">
+  <h2>Comparte tu recuerdo</h2>
+  <input type="text" id="autor" placeholder="Tu nombre">
+  <textarea id="anecdota" placeholder="Escribe aquí tu recuerdo..."></textarea><br>
+  <button onclick="guardarAnecdota()">Guardar</button>
+  <button onclick="mostrarSeccion('presentacion')">Volver a Presentación</button>
+  <div id="mensajes" style="color: green; margin-top: 10px;"></div>
+
+  <div id="anecdotasGuardadas"></div>
+</section>
+
 <!-- Modal para ampliar imágenes -->
 <div id="modal">
   <img id="modal-img" src="">
 </div>
 
 <script>
+// Cambiar secciones
 function mostrarSeccion(seccion) {
   document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
   document.getElementById(seccion).classList.add('active');
+  if(seccion === 'anecdotas') cargarAnecdotas();
 }
 
-// Ampliar imagen en modal
+// Modal para imágenes
 function ampliarImagen(src) {
   const modal = document.getElementById('modal');
   const modalImg = document.getElementById('modal-img');
@@ -82,15 +97,35 @@ function ampliarImagen(src) {
   modal.onclick = () => { modal.style.display = 'none'; };
 }
 
-// Guardar anécdota en localStorage
+// Guardar anécdota
 function guardarAnecdota() {
   const texto = document.getElementById('anecdota').value.trim();
+  const autor = document.getElementById('autor').value.trim() || "Anonimo";
   if(!texto) { alert("Escribe algo antes de guardar."); return; }
   let anecdotas = JSON.parse(localStorage.getItem('anecdotas')) || [];
-  anecdotas.push(texto);
+  anecdotas.push({autor, texto});
   localStorage.setItem('anecdotas', JSON.stringify(anecdotas));
   document.getElementById('anecdota').value = "";
-  document.getElementById('mensajes').innerText = "¡Anécdota guardada!";
+  document.getElementById('autor').value = "";
+  document.getElementById('mensajes').innerText = "¡Recuerdo guardado!";
+  cargarAnecdotas();
+}
+
+// Cargar anécdotas guardadas
+function cargarAnecdotas() {
+  const contenedor = document.getElementById('anecdotasGuardadas');
+  contenedor.innerHTML = "";
+  let anecdotas = JSON.parse(localStorage.getItem('anecdotas')) || [];
+  if(anecdotas.length === 0) {
+    contenedor.innerHTML = "<p>No hay recuerdos aún.</p>";
+    return;
+  }
+  anecdotas.forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'anecdotaItem';
+    div.innerHTML = `<span class="autor">${a.autor}:</span> ${a.texto}`;
+    contenedor.appendChild(div);
+  });
 }
 </script>
 
