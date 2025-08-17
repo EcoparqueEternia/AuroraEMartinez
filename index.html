@@ -1,176 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memorias de [Nombre]</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; text-align: center; }
-  section { display: none; padding: 20px; transition: opacity 0.5s ease-in-out; }
-  section.active { display: block; opacity: 1; }
-  h1, h2 { color: #333; }
-  img { max-width: 100%; height: auto; border-radius: 10px; }
-  .carousel { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scroll-behavior: smooth; }
-  .carousel::-webkit-scrollbar { height: 8px; }
-  .carousel::-webkit-scrollbar-thumb { background-color: #4CAF50; border-radius: 4px; }
-  .carousel img { width: 200px; cursor: pointer; border-radius: 5px; transition: transform 0.3s; }
-  .carousel img:hover { transform: scale(1.05); }
-  .cards { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
-  .card { background: #4CAF50; color: white; padding: 20px; border-radius: 10px; width: 150px; cursor: pointer; font-size: 16px; transition: transform 0.3s; }
-  .card:hover { transform: scale(1.05); }
-  button { padding: 10px 20px; margin: 10px; cursor: pointer; border: none; border-radius: 5px; background-color: #4CAF50; color: white; font-size: 16px; }
-  textarea, input { width: 90%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin: 10px 0; }
-  textarea { height: 120px; resize: none; }
-  #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:10; }
-  #modal img { max-width:90%; max-height:90%; border-radius:10px; }
-  #anecdotasGuardadas { text-align: left; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
-  .anecdotaItem { background: #e8f5e9; padding: 10px; margin-bottom: 10px; border-radius: 5px; position: relative; }
-  .autor { font-weight: bold; color: #2e7d32; }
-  .eliminarBtn { position: absolute; top: 5px; right: 5px; background: #e53935; color: white; border: none; border-radius: 3px; cursor: pointer; padding: 2px 6px; font-size: 12px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memorial</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Fondo con video */
+    #presentacion {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #presentacion video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Overlay oscuro para contraste */
+    #presentacion::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    /* Texto y tarjetas centradas en la parte baja */
+    .contenido {
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: white;
+      z-index: 1;
+    }
+
+    .contenido p {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .card:hover {
+      transform: scale(1.1);
+      background: white;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Sección Presentación -->
-<section id="presentacion" class="active">
-  <img src="presentacion.mp4" alt="Foto de Presentación">
-  <p>Un espacio para recordar y compartir historias.</p>
-  <div class="cards">
-    <div class="card" onclick="mostrarSeccion('galeria')">Galería</div>
-    <div class="card" onclick="mostrarSeccion('arbol')">Árbol Genealógico</div>
-    <div class="card" onclick="mostrarSeccion('anecdotas')">Anecdotario</div>
-  </div>
-</section>
+  <!-- Sección Presentación -->
+  <section id="presentacion" class="active">
+    <video autoplay muted loop playsinline>
+      <source src="presentacion.mp4" type="video/mp4">
+      Tu navegador no soporta la reproducción de video.
+    </video>
+    <div class="contenido">
+      <p>Un espacio para recordar y compartir historias</p>
+      <div class="cards">
+        <div class="card" onclick="mostrarSeccion('galeria')">Galería</div>
+        <div class="card" onclick="mostrarSeccion('arbol')">Árbol Genealógico</div>
+        <div class="card" onclick="mostrarSeccion('anecdotas')">Anecdotario</div>
+      </div>
+    </div>
+  </section>
 
-<!-- Sección Galería -->
-<section id="galeria">
-  <h2>Galería de Fotos</h2>
-  <div class="carousel">
-    <img src="foto1.jpg" alt="Foto 1" onclick="ampliarImagen(this.src)">
-    <img src="foto2.jpg" alt="Foto 2" onclick="ampliarImagen(this.src)">
-    <img src="foto3.jpg" alt="Foto 3" onclick="ampliarImagen(this.src)">
-    <img src="foto4.jpg" alt="Foto 4" onclick="ampliarImagen(this.src)">
-  </div>
-  <button onclick="mostrarSeccion('presentacion')">Volver</button>
-</section>
-
-<!-- Sección Árbol Genealógico -->
-<section id="arbol">
-  <h2>Árbol Genealógico</h2>
-  <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" style="max-width:90%; border-radius:10px; cursor:pointer;" onclick="ampliarImagen(this.src)">
-  <br>
-  <button onclick="mostrarSeccion('presentacion')">Volver</button>
-</section>
-
-<!-- Sección Recuerdos -->
-<section id="anecdotas">
-  <h2>Comparte tu recuerdo</h2>
-  <input type="text" id="autor" placeholder="Tu nombre">
-  <textarea id="anecdota" placeholder="Escribe aquí tu recuerdo..."></textarea><br>
-  <button onclick="guardarAnecdota()">Guardar</button>
-  <button onclick="mostrarSeccion('presentacion')">Volver</button>
-  <div id="mensajes" style="color: green; margin-top: 10px;"></div>
-
-  <div id="anecdotasGuardadas"></div>
-</section>
-
-<!-- Modal para ampliar imágenes -->
-<div id="modal">
-  <img id="modal-img" src="">
-</div>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
-
-<script>
-  // Configuración de Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDXITZbvFlKimLYortmNuR77Y1-8lMBnaI",
-    authDomain: "anecdotario-2fd2c.firebaseapp.com",
-    databaseURL: "https://anecdotario-2fd2c-default-rtdb.firebaseio.com",
-    projectId: "anecdotario-2fd2c",
-    storageBucket: "anecdotario-2fd2c.firebasestorage.app",
-    messagingSenderId: "13632591324",
-    appId: "1:13632591324:web:61144ef77e61233ffc6b19",
-    measurementId: "G-E28P61XXD0"
-  };
-
-  // Inicializar Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-  const analytics = firebase.analytics();
-
-  // Cambiar secciones
-  function mostrarSeccion(seccion) {
-    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-    document.getElementById(seccion).classList.add('active');
-    if(seccion === 'anecdotas') cargarAnecdotas();
-  }
-
-  // Modal para imágenes
-  function ampliarImagen(src) {
-    const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modal-img');
-    modalImg.src = src;
-    modal.style.display = 'flex';
-    modal.onclick = () => { modal.style.display = 'none'; };
-  }
-
-  // Referencia a la base de datos
-  const dbRef = database.ref('recuerdos');
-
-  // Guardar un recuerdo
-  function guardarAnecdota() {
-    const texto = document.getElementById('anecdota').value.trim();
-    const autor = document.getElementById('autor').value.trim() || "Anónimo";
-    if (!texto) { alert("Escribe algo antes de guardar."); return; }
-
-    const nuevoRecuerdo = dbRef.push();
-    nuevoRecuerdo.set({
-      autor: autor,
-      texto: texto,
-      fecha: new Date().toISOString()
-    });
-
-    document.getElementById('anecdota').value = "";
-    document.getElementById('autor').value = "";
-    document.getElementById('mensajes').innerText = "¡Recuerdo guardado!";
-    cargarAnecdotas();
-  }
-
-  // Cargar recuerdos
-  function cargarAnecdotas() {
-    const contenedor = document.getElementById('anecdotasGuardadas');
-    contenedor.innerHTML = "";
-
-    dbRef.once('value', (snapshot) => {
-      const recuerdos = snapshot.val();
-      if (!recuerdos) {
-        contenedor.innerHTML = "<p>No hay recuerdos aún.</p>";
-        return;
-      }
-      Object.keys(recuerdos).forEach((key) => {
-        const a = recuerdos[key];
-        const div = document.createElement('div');
-        div.className = 'anecdotaItem';
-        div.innerHTML = `
-          <span class="autor">${a.autor}:</span> ${a.texto} 
-          <button class="eliminarBtn" onclick="eliminarAnecdota('${key}')">X</button>
-        `;
-        contenedor.appendChild(div);
-      });
-    });
-  }
-
-  // Eliminar recuerdo
-  function eliminarAnecdota(key) {
-    dbRef.child(key).remove();
-    cargarAnecdotas();
-  }
-
-</script>
+  <script>
+    function mostrarSeccion(seccion) {
+      alert("Abrir sección: " + seccion);
+      // Aquí luego podemos enlazar a otras páginas o mostrar el contenido dinámicamente
+    }
+  </script>
 
 </body>
 </html>
