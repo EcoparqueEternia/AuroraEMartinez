@@ -14,182 +14,57 @@
     color: #333; 
     text-align: center; 
   }
-
   h1, h2 { 
     font-family: 'Montserrat', sans-serif; 
     color: #1b3a57; 
     margin-bottom: 15px; 
   }
-
-  p { 
-    font-size: 1.1em; 
-    color: #555; 
-    margin-bottom: 20px; 
-  }
-
-  section { 
-    display: none; 
-    padding: 30px 20px; 
-    transition: opacity 0.5s ease-in-out; 
-  }
-  section.active { 
-    display: block; 
-    opacity: 1; 
-  }
-
-  img, video { 
-    max-width: 100%; 
-    height: auto; 
-    border-radius: 15px; 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  }
-
-  .cards { 
-    display: flex; 
-    justify-content: center; 
-    flex-wrap: wrap; 
-    gap: 25px; 
-    margin-top: 25px; 
-  }
+  p { font-size: 1.1em; color: #555; margin-bottom: 20px; }
+  section { display: none; padding: 30px 20px; transition: opacity 0.5s ease-in-out; }
+  section.active { display: block; opacity: 1; }
+  img, video { max-width: 100%; height: auto; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);}
+  .cards { display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; margin-top: 25px; }
   .card { 
     background: linear-gradient(135deg, #4CAF50, #2e7d32); 
-    color: white; 
-    padding: 25px 20px; 
-    border-radius: 15px; 
-    width: 160px; 
-    cursor: pointer; 
-    font-size: 17px; 
-    font-weight: 600; 
-    text-transform: uppercase;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+    color: white; padding: 25px 20px; border-radius: 15px; 
+    width: 160px; cursor: pointer; font-size: 17px; font-weight: 600; text-transform: uppercase;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;
   }
-  .card:hover { 
-    transform: translateY(-5px) scale(1.05); 
-    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-  }
-
-  button { 
-    padding: 12px 25px; 
-    margin: 12px 5px; 
-    cursor: pointer; 
-    border: none; 
-    border-radius: 8px; 
-    background-color: #1b3a57; 
-    color: white; 
-    font-size: 16px; 
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-  button:hover { 
-    background-color: #2e7d32; 
-    transform: translateY(-3px);
-  }
-
-  .carousel { 
-    display: flex; 
-    overflow-x: auto; 
-    gap: 15px; 
-    padding-bottom: 15px; 
-    scroll-behavior: smooth; 
-  }
-  .carousel::-webkit-scrollbar { 
-    height: 8px; 
-  }
-  .carousel::-webkit-scrollbar-thumb { 
-    background-color: #2e7d32; 
-    border-radius: 4px; 
-  }
-  .carousel img { 
-    width: 220px; 
-    cursor: pointer; 
-    border-radius: 10px; 
-    transition: transform 0.3s, box-shadow 0.3s; 
-  }
-  .carousel img:hover { 
-    transform: scale(1.07); 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  }
-
-  #anecdotasGuardadas { 
-    text-align: left; 
-    margin-top: 25px; 
-    max-width: 650px; 
-    margin-left: auto; 
-    margin-right: auto; 
-  }
-  .anecdotaItem { 
-    background: #eaf2f8; 
-    padding: 15px; 
-    margin-bottom: 12px; 
-    border-radius: 10px; 
-    position: relative; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-  }
-  .anecdotaItem:hover { 
-    transform: scale(1.02);
-  }
-  .autor { 
-    font-weight: bold; 
-    color: #1b3a57; 
-  }
-  .eliminarBtn { 
-    position: absolute; 
-    top: 8px; 
-    right: 8px; 
-    background: #e53935; 
-    color: white; 
-    border: none; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    padding: 3px 7px; 
-    font-size: 13px; 
-  }
-
-  #modal { 
-    display:none; 
-    position:fixed; 
-    top:0; left:0; 
-    width:100%; height:100%; 
-    background:rgba(0,0,0,0.9); 
-    justify-content:center; 
-    align-items:center; 
-    z-index:10; 
-  }
-  #modal img { 
-    max-width:90%; max-height:90%; 
-    border-radius:15px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  }
-
-  input, textarea { 
-    width: 92%; 
-    padding: 12px; 
-    border-radius: 8px; 
-    border: 1px solid #ccc; 
-    margin: 10px 0; 
-    font-size: 15px;
-    font-family: 'Roboto', sans-serif;
-  }
+  .card:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 12px 25px rgba(0,0,0,0.2);}
+  button { padding: 12px 25px; margin: 12px 5px; cursor: pointer; border: none; border-radius: 8px; 
+    background-color: #1b3a57; color: white; font-size: 16px; font-weight: 500; transition: all 0.3s ease;}
+  button:hover { background-color: #2e7d32; transform: translateY(-3px);}
+  .carousel { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; scroll-behavior: smooth; }
+  .carousel::-webkit-scrollbar { height: 8px; }
+  .carousel::-webkit-scrollbar-thumb { background-color: #2e7d32; border-radius: 4px; }
+  .carousel img { width: 220px; cursor: pointer; border-radius: 10px; transition: transform 0.3s, box-shadow 0.3s; }
+  .carousel img:hover { transform: scale(1.07); box-shadow: 0 10px 25px rgba(0,0,0,0.2);}
+  #anecdotasGuardadas { text-align: left; margin-top: 25px; max-width: 650px; margin-left: auto; margin-right: auto; }
+  .anecdotaItem { background: #eaf2f8; padding: 15px; margin-bottom: 12px; border-radius: 10px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;}
+  .anecdotaItem:hover { transform: scale(1.02);}
+  .autor { font-weight: bold; color: #1b3a57; }
+  .eliminarBtn { position: absolute; top: 8px; right: 8px; background: #e53935; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 3px 7px; font-size: 13px; }
+  #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:10; }
+  #modal img { max-width:90%; max-height:90%; border-radius:15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);}
+  input, textarea { width: 92%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; margin: 10px 0; font-size: 15px; font-family: 'Roboto', sans-serif;}
   textarea { height: 140px; resize: none; }
 </style>
 </head>
 <body>
 
-<!-- Sección Presentación -->
+<!-- Presentación -->
 <section id="presentacion" class="active">
   <video autoplay muted loop playsinline style="max-width:90%; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.2);">
     <source src="presentacion.mp4" type="video/mp4">
     Tu navegador no soporta la reproducción de video.
   </video>
-  <p>Un espacio para recordar y compartir historias familiares</p>
+  <h1>Bienvenido a Memorias de [Nombre]</h1>
+  <p>Un espacio innovador para recordar y compartir historias familiares con tecnología de vanguardia.</p>
   <div class="cards">
     <div class="card" onclick="mostrarSeccion('galeria')">Galería</div>
     <div class="card" onclick="mostrarSeccion('arbol')">Árbol Genealógico</div>
     <div class="card" onclick="mostrarSeccion('anecdotas')">Anecdotario</div>
   </div>
-
   <!-- Imagen de contacto -->
   <div style="margin-top:30px;">
     <img src="contacto.png" alt="Datos de Contacto para Ventas" style="max-width:320px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.2); cursor:pointer;" onclick="window.location.href='mailto:ventas@empresa.com';">
@@ -197,7 +72,7 @@
   </div>
 </section>
 
-<!-- Sección Galería -->
+<!-- Galería -->
 <section id="galeria">
   <h2>Galería de Fotos</h2>
   <div class="carousel">
@@ -209,7 +84,7 @@
   <button onclick="mostrarSeccion('presentacion')">Volver</button>
 </section>
 
-<!-- Sección Árbol Genealógico -->
+<!-- Árbol Genealógico -->
 <section id="arbol">
   <h2>Árbol Genealógico</h2>
   <img src="arbolgenealogico.jpg" alt="Árbol Genealógico" onclick="ampliarImagen(this.src)">
@@ -217,8 +92,45 @@
   <button onclick="mostrarSeccion('presentacion')">Volver</button>
 </section>
 
-<!-- Sección Recuerdos -->
+<!-- Anecdotario -->
 <section id="anecdotas">
   <h2>Comparte tu recuerdo</h2>
   <input type="text" id="autor" placeholder="Tu nombre">
+  <textarea id="anecdota" placeholder="Escribe aquí tu recuerdo..."></textarea><br>
+  <button onclick="guardarAnecdota()">Guardar</button>
+  <button onclick="mostrarSeccion('presentacion')">Volver</button>
+  <div id="mensajes" style="color: #2e7d32; margin-top: 12px;"></div>
+  <div id="anecdotasGuardadas"></div>
+</section>
+
+<!-- Modal de imagen -->
+<div id="modal">
+  <img id="modal-img" src="">
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
+
+<script>
+  // Configuración Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXITZbvFlKimLYortmNuR77Y1-8lMBnaI",
+    authDomain: "anecdotario-2fd2c.firebaseapp.com",
+    databaseURL: "https://anecdotario-2fd2c-default-rtdb.firebaseio.com",
+    projectId: "anecdotario-2fd2c",
+    storageBucket: "anecdotario-2fd2c.firebasestorage.app",
+    messagingSenderId: "13632591324",
+    appId: "1:13632591324:web:61144ef77e61233ffc6b19",
+    measurementId: "G-E28P61XXD0"
+  };
+  const app = firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+  const analytics = firebase.analytics();
+
+  // Función mostrar secciones
+  function mostrarSeccion(seccion) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(seccion).classList.add('
  
